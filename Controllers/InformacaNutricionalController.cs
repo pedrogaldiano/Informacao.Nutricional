@@ -1,4 +1,5 @@
 using Informacao.Nutricional.DataAccess;
+using Informacao.Nutricional.DTOs;
 using Informacao.Nutricional.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,8 +61,8 @@ public class InformacaNutricionalController : ControllerBase
         var result = new NutrientesModel();
         result.SumAndUnify(ingredientes);
         ingredientes = null;
-
-        return Ok(result);
+        
+        return Ok(new NutrientesResponse(result));
     }
 
 }

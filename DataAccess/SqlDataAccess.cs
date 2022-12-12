@@ -20,7 +20,7 @@ public class SqlDataAccess : ISqlDataAccess
         using IDbConnection connection = 
             new SqlConnection(_config.GetConnectionString("SqlConnection"));
         
-        var query = "SELECT * FROM [nutricaodb].[dbo].[informacao_nutricional]";
+        var query = "SELECT TOP 100 * FROM [nutricaodb].[dbo].[informacao_nutricional]";
                
         return await connection.QueryAsync<NutrientesModel>(query);
     }
@@ -38,9 +38,4 @@ public class SqlDataAccess : ISqlDataAccess
 
         return await connection.QueryAsync<NutrientesModel>(query);
     }
-
-    // public async Task<IEnumerable<NutrientesModel>> Formula(Dictionary<int, double> formula)
-    // {  
-
-    // }
 }
