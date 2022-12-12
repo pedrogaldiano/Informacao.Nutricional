@@ -37,4 +37,9 @@ public class SqlDataAccess : ISqlDataAccess
 
         return await connection.QueryAsync<NutrientesModel>(query);
     }
+
+    // public async Task<IEnumerable<NutrientesModel>> Formula(Dictionary<int, double> formula)
+    // {  
+
+    // }
 }

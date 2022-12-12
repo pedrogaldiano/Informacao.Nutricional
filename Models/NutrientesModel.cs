@@ -1,4 +1,4 @@
-namespace Models;
+namespace Informacao.Nutricional.Models;
 
 public class NutrientesModel
 {
@@ -69,4 +69,3 @@ public class NutrientesModel
     public double prolina_g { get; set; }
     public double serina_g { get; set; }
 }
-

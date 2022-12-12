@@ -1,6 +1,6 @@
 using Informacao.Nutricional.DataAccess;
+using Informacao.Nutricional.Models;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 
 namespace Informacao.Nutricional;
 
@@ -33,16 +33,27 @@ public class InformacaNutricionalController : ControllerBase
     }
 
     [HttpPost("Formula")]
-    public async Task<ActionResult<IEnumerable<NutrientesModel>>> Formula(Dictionary<int, int> formula)
-    {
+    public async Task<ActionResult<IEnumerable<NutrientesModel>>> Formula(Dictionary<int, double> formula)
+    {   
+        // As chaves são menores que 1
         if (formula.Keys.Any(val => val < 1)) return BadRequest();
 
-        if (formula.Values.Any(val => val < 1)) return BadRequest();
+        // Os valores são menores ou iguais a zero
+        if (formula.Values.Any(val => val <= 0)) return BadRequest();
 
-        if (formula.Values.Sum() > 100) return BadRequest();
+        // A soma dos valores é diferente de 100%
+        if (formula.Values.Sum() != 100) return BadRequest();
 
+        var nutrientes = await _sqlDataAccess.ListarPorIDs(formula.Keys.ToArray());
+        var ingredientes = nutrientes.ToList();
+        // Não encontrou algum ID
+        if (ingredientes.Count() != formula.Keys.Count()) return BadRequest();
 
-        // var result = await _sqlDataAccess.ListarPorIDs(formula.Keys.ToArray());
+        for (int i = 0; i < ingredientes.Count(); i++)
+        {
+            double val = formula[ingredientes[i].id];
+            ingredientes[i].MultiplyBy(val);
+        }
     }
 
 }
