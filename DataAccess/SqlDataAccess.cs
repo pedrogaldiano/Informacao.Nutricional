@@ -2,8 +2,8 @@ namespace Informacao.Nutricional.DataAccess;
 
 using System.Data;
 using Dapper;
+using Informacao.Nutricional.Models;
 using Microsoft.Data.SqlClient;
-using Models;
 
 public class SqlDataAccess : ISqlDataAccess
 {
@@ -15,6 +15,7 @@ public class SqlDataAccess : ISqlDataAccess
     }
 
     public async Task<IEnumerable<NutrientesModel>> ListarTodos()
+    
     {
         using IDbConnection connection = 
             new SqlConnection(_config.GetConnectionString("SqlConnection"));

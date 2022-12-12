@@ -1,4 +1,4 @@
-using Models;
+using Informacao.Nutricional.Models;
 
 namespace Informacao.Nutricional.DataAccess;
 

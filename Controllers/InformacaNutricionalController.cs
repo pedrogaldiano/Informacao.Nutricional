@@ -33,7 +33,7 @@ public class InformacaNutricionalController : ControllerBase
     }
 
     [HttpPost("Formula")]
-    public async Task<ActionResult<IEnumerable<NutrientesModel>>> Formula(Dictionary<int, double> formula)
+    public async Task<ActionResult<NutrientesModel>> Formula(Dictionary<int, double> formula)
     {   
         // As chaves são menores que 1
         if (formula.Keys.Any(val => val < 1)) return BadRequest();
@@ -46,6 +46,8 @@ public class InformacaNutricionalController : ControllerBase
 
         var nutrientes = await _sqlDataAccess.ListarPorIDs(formula.Keys.ToArray());
         var ingredientes = nutrientes.ToList();
+        nutrientes = null;
+        
         // Não encontrou algum ID
         if (ingredientes.Count() != formula.Keys.Count()) return BadRequest();
 
@@ -54,6 +56,12 @@ public class InformacaNutricionalController : ControllerBase
             double val = formula[ingredientes[i].id];
             ingredientes[i].MultiplyBy(val);
         }
+
+        var result = new NutrientesModel();
+        result.SumAndUnify(ingredientes);
+        ingredientes = null;
+
+        return Ok(result);
     }
 
 }
