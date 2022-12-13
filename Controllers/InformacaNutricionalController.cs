@@ -16,10 +16,10 @@ public class InformacaNutricionalController : ControllerBase
         _sqlDataAccess = sqlDataAccess;
     }
 
-    [HttpGet("ListarTodos")]
-    public async Task<ActionResult<IEnumerable<NutrientesModel>>> ListarTodos()
+    [HttpGet("ListarTodosIngredientes")]
+    public async Task<ActionResult<IEnumerable<NutrientesModel>>> ListarTodosIngredientes()
     {
-        var result = await _sqlDataAccess.ListarTodos();
+        var result = await _sqlDataAccess.ListarTodosIngredientes();
         return Ok(result);
     }
 
@@ -61,7 +61,7 @@ public class InformacaNutricionalController : ControllerBase
         var result = new NutrientesModel();
         result.SumAndUnify(ingredientes);
         ingredientes = null;
-        
+
         return Ok(new NutrientesResponse(result));
     }
 

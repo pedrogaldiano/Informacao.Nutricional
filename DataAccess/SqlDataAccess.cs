@@ -14,15 +14,14 @@ public class SqlDataAccess : ISqlDataAccess
         _config = config;
     }
 
-    public async Task<IEnumerable<NutrientesModel>> ListarTodos()
-    
+    public async Task<IEnumerable<IngredienteModel>> ListarTodosIngredientes()
     {
         using IDbConnection connection = 
             new SqlConnection(_config.GetConnectionString("SqlConnection"));
         
-        var query = "SELECT TOP 100 * FROM [nutricaodb].[dbo].[informacao_nutricional]";
+        var query = "SELECT id, ingrediente FROM [nutricaodb].[dbo].[informacao_nutricional]";
                
-        return await connection.QueryAsync<NutrientesModel>(query);
+        return await connection.QueryAsync<IngredienteModel>(query);
     }
 
     public async Task<IEnumerable<NutrientesModel>> ListarPorIDs(int[] listaIDs)
