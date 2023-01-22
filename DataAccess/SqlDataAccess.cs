@@ -37,4 +37,14 @@ public class SqlDataAccess : ISqlDataAccess
 
         return await connection.QueryAsync<NutrientesModel>(query);
     }
+
+    public async Task<IEnumerable<VdModel>> ListarPorID(int id)
+    {
+        using IDbConnection connection = 
+            new SqlConnection(_config.GetConnectionString("SqlConnection"));
+
+        var query = $"SELECT * FROM [nutricaodb].[dbo].[valores_referencia] WHERE id = @ID";
+
+        return await connection.QueryAsync<VdModel>(query, new { ID = id });
+    }
 }
