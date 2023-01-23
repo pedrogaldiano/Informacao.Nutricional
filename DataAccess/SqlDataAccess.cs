@@ -31,8 +31,6 @@ public class SqlDataAccess : ISqlDataAccess
 
         var listaString = String.Join(",", listaIDs);
 
-        // Sim, eu sei que usar params seria mais seguro, mas eu to garantindo na controller
-        // que eu recebo um array de int e na ListaPorIDs, então não tem como vir outra coisa.
         var query = $"SELECT * FROM [nutricaodb].[dbo].[informacao_nutricional] WHERE id IN ({ listaString })";
 
         return await connection.QueryAsync<NutrientesModel>(query);
