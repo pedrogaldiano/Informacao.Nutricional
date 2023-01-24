@@ -17,10 +17,24 @@ public class InformacaNutricionalController : ControllerBase
     }
 
     [HttpGet("ListarTodosIngredientes")]
-    public async Task<ActionResult<IEnumerable<NutrientesModel>>> ListarTodosIngredientes()
+    public async Task<IEnumerable<IngredienteModel>> ListarTodosIngredientes()
     {
         var result = await _sqlDataAccess.ListarTodosIngredientes();
-        return Ok(result);
+        return result;
+    }
+
+    [HttpGet("ListarTodosNutrientes")]
+    public async Task<IEnumerable<NutrienteModel>> ListarTodosNutrientes()
+    {
+        var result = await _sqlDataAccess.ListarTodosNutrientes();
+        return result;
+    }
+
+    [HttpGet("ListarTodosGrupos")]
+    public async Task<IEnumerable<GrupoModel>> ListarTodosGrupos()
+    {
+        var result = await _sqlDataAccess.ListarTodosGrupos();
+        return result;
     }
 
     [HttpPost("ListarPorIDs")]
@@ -64,5 +78,4 @@ public class InformacaNutricionalController : ControllerBase
 
         return Ok(new NutrientesResponse(result));
     }
-
 }

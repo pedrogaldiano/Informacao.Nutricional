@@ -4,9 +4,6 @@ namespace Informacao.Nutricional.DTOs;
 
 public class NutrientesResponse
 {
-
-    // string s = $"{ $"{value.ToString("0.000000")} --- VD% { percent.ToString("00.00")}";
-
     public NutrientesResponse(NutrientesModel ingredientes)
     {
         var percent = 30.00;

@@ -19,9 +19,29 @@ public class SqlDataAccess : ISqlDataAccess
         using IDbConnection connection = 
             new SqlConnection(_config.GetConnectionString("SqlConnection"));
         
-        var query = "SELECT id, ingrediente FROM [nutricaodb].[dbo].[informacao_nutricional]";
+        var query = "SELECT id, ingrediente FROM [nutricaodb].[dbo].[ingredientes]";
                
         return await connection.QueryAsync<IngredienteModel>(query);
+    }
+
+    public async Task<IEnumerable<NutrienteModel>> ListarTodosNutrientes()
+    {
+        using IDbConnection connection = 
+            new SqlConnection(_config.GetConnectionString("SqlConnection"));
+
+        var query = "SELECT id, nutriente FROM [nutricaodb].[dbo].[nutrientes]";
+
+        return await connection.QueryAsync<NutrienteModel>(query);
+    }
+
+    public async Task<IEnumerable<GrupoModel>> ListarTodosGrupos()
+    {
+        using IDbConnection connection =
+            new SqlConnection(_config.GetConnectionString("SqlConnection"));
+        
+        var query = "SELECT id, grupo FROM [nutricaodb].[dbo].[grupos]";
+
+        return await connection.QueryAsync<GrupoModel>(query);
     }
 
     public async Task<IEnumerable<NutrientesModel>> ListarPorIDs(int[] listaIDs)
