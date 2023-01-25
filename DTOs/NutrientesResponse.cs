@@ -2,9 +2,9 @@ using Informacao.Nutricional.Models;
 
 namespace Informacao.Nutricional.DTOs;
 
-public class NutrientesResponse
+public class NutrientesResponsess
 {
-    public NutrientesResponse(NutrientesModel ingredientes)
+    public NutrientesResponsess(NutrientesModel ingredientes)
     {
         var percent = 30.00;
         // umidade_percentual = $"{ $"{  ingredientes.umidade_percentual.ToString("0.000000")} --- VD% { percent.ToString("00.00")}";

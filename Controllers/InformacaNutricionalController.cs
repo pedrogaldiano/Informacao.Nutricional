@@ -38,9 +38,8 @@ public class InformacaNutricionalController : ControllerBase
     }
 
 
-    // TODO: Recebe uma lista de IDs e retorna os respectivos ingredientes
-    [HttpPost("ListarPorIDs")]
-    public async Task<ActionResult<IEnumerable<IngredienteModel>>> ListarPorIDs(int[] listaIDs)
+    [HttpPost("ListarIngredientesPorIDs")]
+    public async Task<ActionResult<IEnumerable<IngredienteResponse>>> ListarIngredientesPorIDs(int[] listaIDs)
     {
         bool anyZeroOrNegatives = listaIDs.Any(val => val < 1);
         if (anyZeroOrNegatives) return BadRequest();
@@ -48,6 +47,18 @@ public class InformacaNutricionalController : ControllerBase
         var result = await _sqlDataAccess.ListarIngredientesPorIDs(listaIDs);
         return Ok(result);
     }
+
+    // // TODO: Recebe uma lista de ingredientes (IDs) e retornar os nutrientes de cada ingrediente
+    // [HttpPost("ListarPorIDs")]
+    // public async Task<ActionResult<IEnumerable<IngredienteResponse>>> ListarPorIDs(int[] listaIDs)
+    // {
+    //     bool anyZeroOrNegatives = listaIDs.Any(val => val < 1);
+    //     if (anyZeroOrNegatives) return BadRequest();
+
+    //     var result = await _sqlDataAccess.ListarIngredientesPorIDs(listaIDs);
+    //     return Ok(result);
+    // }
+
 
     // [HttpPost("Formula")]
     // public async Task<ActionResult<NutrientesModel>> Formula(Dictionary<int, double> formula)
