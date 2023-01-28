@@ -58,6 +58,7 @@ public class SqlDataAccess : ISqlDataAccess
 
         var results = await connection
             .QueryAsync<InfoNutri>(query, new { ids = listaIDs });
+
         return results;
     }
 }

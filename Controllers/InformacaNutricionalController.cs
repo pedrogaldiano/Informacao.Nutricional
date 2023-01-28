@@ -30,85 +30,38 @@ public class InformacaNutricionalController : ControllerBase
     [HttpGet("ListarTodosNutrientes")]
     public async Task<IEnumerable<NutrienteModel>> ListarTodosNutrientes()
     {
-        var result = await _sqlDataAccess.ListarTodosNutrientes();
-        return result;
+        return await _service.ListarTodosNutrientes();
     }
 
     [HttpGet("ListarTodosGrupos")]
     public async Task<IEnumerable<GrupoModel>> ListarTodosGrupos()
     {
-        var result = await _sqlDataAccess.ListarTodosGrupos();
-        return result;
+        return await _service.ListarTodosGrupos();
     }
 
 
     //TODO: Descomentar
     [HttpPost("ListarIngredientesPorIDs")]
-    public async Task<ActionResult<IEnumerable<String>>> ListarIngredientesPorIDs(int[] listaIDs)
+    public async Task<ActionResult<IEnumerable<InfoNutri>>> ListarIngredientesPorIDs(int[] listaIDs)
     {
         bool anyZeroOrNegatives = listaIDs.Any(val => val < 1);
         if (anyZeroOrNegatives) return BadRequest();
 
-        var result = await _sqlDataAccess.ListarIngredientesPorIDs(listaIDs);
-        return Ok(result);
+        return Ok(await _service.ListarIngredientesPorIDs(listaIDs));
     }
 
     [HttpPost("Formula")]
-    public async Task<ActionResult<Dictionary<string, double>>> Formula(Dictionary<int, double> formula)
+    public async Task<ActionResult<IDictionary<string, double>>> Formula(
+        IDictionary<int, double> formula)
     {
-        if (formula.Count() == 0)
-            return BadRequest();
+        if (formula.Count() == 0) return BadRequest();
 
-        if (formula.Keys.Any(x => x <= 0))
-            return BadRequest();
-        
-        if (formula.Values.Any(x => x <= 0))
-            return BadRequest();
-        
-        if (formula.Values.Sum() != 100)
-            return BadRequest();
+        if (formula.Keys.Any(x => x <= 0)) return BadRequest();
 
-        var infos = await _sqlDataAccess
-            .ListarIngredientesPorIDs(formula.Keys.ToArray());
+        if (formula.Values.Any(x => x <= 0)) return BadRequest();
 
-        // Ponderar os nutrientes
-        var mediaPonderada = _service.MediaPonderada(formula, infos);
+        if (formula.Values.Sum() != 100) return BadRequest();
 
-        // Somar os nutrientes
-        var totalNutrientes = _service.SomarNutrientes(infos);
-        return Ok(totalNutrientes);
+        return Ok(await _service.GerarInfoNutricional(formula));
     }
-
-
-    // [HttpPost("Formula")]
-    // public async Task<ActionResult<NutrientesModel>> Formula(Dictionary<int, double> formula)
-    // {   
-    //     // As chaves são menores que 1
-    //     if (formula.Keys.Any(val => val < 1)) return BadRequest();
-
-    //     // Os valores são menores ou iguais a zero
-    //     if (formula.Values.Any(val => val <= 0)) return BadRequest();
-
-    //     // A soma dos valores é diferente de 100%
-    //     if (formula.Values.Sum() != 100) return BadRequest();
-
-    //     var nutrientes = await _sqlDataAccess.ListarPorIDs(formula.Keys.ToArray());
-    //     var ingredientes = nutrientes.ToList();
-    //     nutrientes = null;
-        
-    //     // Não encontrou algum ID
-    //     if (ingredientes.Count() != formula.Keys.Count()) return BadRequest();
-
-    //     for (int i = 0; i < ingredientes.Count(); i++)
-    //     {
-    //         double val = formula[ingredientes[i].id];
-    //         ingredientes[i].MultiplyBy(val);
-    //     }
-
-    //     var result = new NutrientesModel();
-    //     result.SumAndUnify(ingredientes);
-    //     ingredientes = null;
-
-    //     return Ok(new NutrientesResponse(result));
-    // }
 }

@@ -1,5 +1,6 @@
 using Informacao.Nutricional.DataAccess;
 using Informacao.Nutricional.DTOs;
+using Informacao.Nutricional.Models;
 
 namespace Informacao.Nutricional.Service;
 
@@ -12,28 +13,24 @@ public class Service: IService
         _sqlDataAccess = sqlDataAccess;
     }
 
-    public IEnumerable<InfoNutri> MediaPonderada(Dictionary<int, double> formula,
-                                                 IEnumerable<InfoNutri> infos)
+    public async Task<IEnumerable<NutrienteModel>> ListarTodosNutrientes() =>
+        await _sqlDataAccess.ListarTodosNutrientes();
+    
+    public async Task<IEnumerable<GrupoModel>> ListarTodosGrupos() =>
+        await _sqlDataAccess.ListarTodosGrupos();
+    
+    public async Task<IEnumerable<InfoNutri>> ListarIngredientesPorIDs(int[] listaIDs) =>
+        await _sqlDataAccess.ListarIngredientesPorIDs(listaIDs);
+    
+    public async Task<IDictionary<string, double>> GerarInfoNutricional(
+        IDictionary<int, double> formula)
     {
-        foreach(var info in infos)
-        {
-            info.Gramas *= (formula[info.IngredienteId] / 100.00);
-        }
+        var infos = await _sqlDataAccess
+            .ListarIngredientesPorIDs(formula.Keys.ToArray());
 
-        return infos;
+        var mediaPonderada = infos.MediaPonderada(formula);
+
+        var totalNutrientes = infos.SomarNutrientes();
+        return totalNutrientes;
     }
-
-    public IDictionary<string, double> SomarNutrientes(IEnumerable<InfoNutri> infos)
-    {
-        var result = new Dictionary<string, double>();
-        foreach (var info in infos)
-        {
-            if (!result.TryAdd(info.Nutriente, info.Gramas))
-            {
-                result[info.Nutriente] += info.Gramas;
-            }
-        }
-        return result;
-    }
-
 }

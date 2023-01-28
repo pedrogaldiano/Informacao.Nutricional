@@ -1,11 +1,12 @@
-using Informacao.Nutricional.DTOs;
+using Informacao.Nutricional.Models;
 
 namespace Informacao.Nutricional.Service;
 
 public interface IService
 {
-    IEnumerable<InfoNutri> MediaPonderada(Dictionary<int, double> formula,
-                                          IEnumerable<InfoNutri> infos);
-
-    IDictionary<string, double> SomarNutrientes(IEnumerable<InfoNutri> infos);
+    Task<IEnumerable<NutrienteModel>> ListarTodosNutrientes();    
+    Task<IEnumerable<GrupoModel>> ListarTodosGrupos();    
+    Task<IEnumerable<InfoNutri>> ListarIngredientesPorIDs(int[] listaIDs);
+    Task<IDictionary<string, double>> GerarInfoNutricional(
+        IDictionary<int, double> formula);
 }
