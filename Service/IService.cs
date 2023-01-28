@@ -6,4 +6,6 @@ public interface IService
 {
     IEnumerable<InfoNutri> MediaPonderada(Dictionary<int, double> formula,
                                           IEnumerable<InfoNutri> infos);
+
+    IDictionary<string, double> SomarNutrientes(IEnumerable<InfoNutri> infos);
 }

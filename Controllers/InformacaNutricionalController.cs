@@ -54,7 +54,7 @@ public class InformacaNutricionalController : ControllerBase
     }
 
     [HttpPost("Formula")]
-    public async Task<ActionResult> Formula(Dictionary<int, double> formula)
+    public async Task<ActionResult<Dictionary<string, double>>> Formula(Dictionary<int, double> formula)
     {
         if (formula.Count() == 0)
             return BadRequest();
@@ -73,9 +73,10 @@ public class InformacaNutricionalController : ControllerBase
 
         // Ponderar os nutrientes
         var mediaPonderada = _service.MediaPonderada(formula, infos);
-        return Ok(mediaPonderada);
 
         // Somar os nutrientes
+        var totalNutrientes = _service.SomarNutrientes(infos);
+        return Ok(totalNutrientes);
     }
 
 

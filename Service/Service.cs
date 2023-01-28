@@ -23,4 +23,17 @@ public class Service: IService
         return infos;
     }
 
+    public IDictionary<string, double> SomarNutrientes(IEnumerable<InfoNutri> infos)
+    {
+        var result = new Dictionary<string, double>();
+        foreach (var info in infos)
+        {
+            if (!result.TryAdd(info.Nutriente, info.Gramas))
+            {
+                result[info.Nutriente] += info.Gramas;
+            }
+        }
+        return result;
+    }
+
 }
