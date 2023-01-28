@@ -1,3 +1,4 @@
+using Informacao.Nutricional.DTOs;
 using Informacao.Nutricional.Models;
 
 namespace Informacao.Nutricional.Service;
