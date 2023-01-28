@@ -1,16 +1,10 @@
 namespace Informacao.Nutricional.DTOs;
 
-public class IngredienteResponse
+public class InfoNutri
 {
-    public string ingrediente { get; set; }
-
-
-    public virtual ICollection<NutrientesResponse> nutrientes { get; set; }
-    // public Dictionary<string, double> nutrientes  { get; set; }
-}
-
-public class NutrientesResponse
-{
-    public string nutriente { get; set; }
-    public double gramas { get; set; }
+    public int IngredienteId { get; set; }
+    public string Ingrediente { get; set; }
+    public int NutrienteId { get; set; }
+    public string Nutriente { get; set; }
+    public double Gramas { get; set; }
 }

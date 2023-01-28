@@ -8,5 +8,5 @@ public interface ISqlDataAccess
     Task<IEnumerable<IngredienteModel>> ListarTodosIngredientes();
     Task<IEnumerable<NutrienteModel>> ListarTodosNutrientes();
     Task<IEnumerable<GrupoModel>> ListarTodosGrupos();    
-    Task<IEnumerable<string>> ListarIngredientesPorIDs(int[] listaIDs);
+    Task<IEnumerable<InfoNutri>> ListarIngredientesPorIDs(int[] listaIDs);
 }

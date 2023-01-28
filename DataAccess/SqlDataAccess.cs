@@ -45,54 +45,19 @@ public class SqlDataAccess : ISqlDataAccess
         return await connection.QueryAsync<GrupoModel>(query);
     }
 
-    public async Task<IEnumerable<string>> ListarIngredientesPorIDs(int[] listaIDs)
+    public async Task<IEnumerable<InfoNutri>> ListarIngredientesPorIDs(int[] listaIDs)
     {
         using IDbConnection connection =
             new SqlConnection(_config.GetConnectionString("SqlConnection"));
 
-        var query = @"SELECT Ingrediente, Nutriente, Gramas
-                    FROM [nutricaodb].[dbo].[informacao_nutricional] 
-
-                    INNER JOIN ingredientes ON informacao_nutricional.IngredienteId=ingredientes.Id
-                    INNER JOIN nutrientes ON informacao_nutricional.NutrienteId=nutrientes.Id
-
+        var query = @"SELECT *
+                    FROM [nutricaodb].[dbo].[informacao_nutricional] info
+                    INNER JOIN ingredientes i ON info.IngredienteId=i.Id
+                    INNER JOIN nutrientes n ON info.NutrienteId=n.Id
                     WHERE IngredienteId IN @ids";
 
-        // var resultq = await connection.QueryAsync<IngredienteResponse>(query, new { ids = listaIDs });
-        
-        var result = await connection
-            .QueryAsync<IngredienteResponse, NutrientesResponse, IngredienteResponse>(
-                query,
-                (i, n) => {
-                    i.nutrientes = n;
-                    return i;
-                },
-                new { ids = listaIDs },
-
-                splitOn: "Nutriente"); 
-
-       
-var sql = "select cast(1 as decimal) ProductId, 'a' ProductName, 'x' AccountOpened, cast(1 as decimal) CustomerId, 'name' CustomerName";
-
-var item = connection.Query<IngredienteModel, Nutrientes, IngredienteModel>(sql,
-    (p, c) => { p.Customer = c; return p; }, splitOn: "CustomerId").First();
-
-// item.Customer.CustomerId.IsEqualTo(1);
-
-//     string strSql = "SELECT DISTINCT TableID AS [Key],TableName AS [Value] FROM dbo.TS_TStuctMaster";
-// Dictionary<string,string> dicts = sqlConnection.Query<KeyValuePair<string,string>>(strSql).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-
-        return new string[] { "result", "aa" };
+        var results = await connection
+            .QueryAsync<InfoNutri>(query, new { ids = listaIDs });
+        return results;
     }
-
-    // public async Task<IEnumerable<VdModel>> ListarPorID(int id)
-    // {
-    //     using IDbConnection connection = 
-    //         new SqlConnection(_config.GetConnectionString("SqlConnection"));
-
-    //     var query = $"SELECT * FROM [nutricaodb].[dbo].[valores_referencia] WHERE id = @ID";
-
-    //     return await connection.QueryAsync<VdModel>(query, new { ID = id });
-    // }
 }

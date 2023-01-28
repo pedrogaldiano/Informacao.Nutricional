@@ -1,4 +1,5 @@
 using Informacao.Nutricional.DataAccess;
+using Informacao.Nutricional.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddSwaggerGen();
 
 // Conexão com o banco de dados
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+builder.Services.AddSingleton<IService, Service>();
 
 var app = builder.Build();
 
