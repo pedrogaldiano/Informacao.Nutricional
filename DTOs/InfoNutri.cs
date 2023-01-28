@@ -1,4 +1,4 @@
-namespace Informacao.Nutricional.Models;
+namespace Informacao.Nutricional.DTOs;
 
 public class InfoNutri
 {
