@@ -40,16 +40,14 @@ public class Service : IService
         var infoNutricional = await GerarInfoNutricional(formula.FormulaDict);
         var valoresRef = await _sqlDataAccess.ListarValorRefPorGrupoID(formula.GrupoId);
 
-        var result = new NutrienteCompleto();
-        result.Grupo = valoresRef.First().Grupo;
+        var result = new NutrienteCompleto(valoresRef.First().Grupo);
         foreach (var valorRef in valoresRef)
         {
-            var gr = infoNutricional[valorRef.NutrienteId];
-            var vd = gr / valorRef.ValorDiario;
-            var tuple = new Tuple<double, double>(gr, vd);
+            var gramas = infoNutricional[valorRef.NutrienteId];
+            var valorDiario = gramas * 100.00 / valorRef.ValorDiario;
+            var tuple = new Tuple<double, double>(gramas, valorDiario);
             result.InfoNutri.Add(valorRef.Nutriente, tuple);
         }
-
         return result;
     }
 }
