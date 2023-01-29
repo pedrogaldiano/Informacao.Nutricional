@@ -4,7 +4,7 @@ using Informacao.Nutricional.Models;
 
 namespace Informacao.Nutricional.Service;
 
-public class Service: IService
+public class Service : IService
 {
     private readonly ISqlDataAccess _sqlDataAccess;
 
@@ -15,14 +15,14 @@ public class Service: IService
 
     public async Task<IEnumerable<NutrienteModel>> ListarTodosNutrientes() =>
         await _sqlDataAccess.ListarTodosNutrientes();
-    
+
     public async Task<IEnumerable<GrupoModel>> ListarTodosGrupos() =>
         await _sqlDataAccess.ListarTodosGrupos();
-    
+
     public async Task<IEnumerable<InfoNutri>> ListarIngredientesPorIDs(int[] listaIDs) =>
         await _sqlDataAccess.ListarIngredientesPorIDs(listaIDs);
-    
-    public async Task<IDictionary<string, double>> GerarInfoNutricional(
+
+    public async Task<IDictionary<int, double>> GerarInfoNutricional(
         IDictionary<int, double> formula)
     {
         var infos = await _sqlDataAccess
@@ -32,5 +32,24 @@ public class Service: IService
 
         var totalNutrientes = infos.SomarNutrientes();
         return totalNutrientes;
+    }
+
+    public async Task<NutrienteCompleto> GerarInfoNutricionalVD(
+        FormulaRequest formula)
+    {
+        var infoNutricional = await GerarInfoNutricional(formula.FormulaDict);
+        var valoresRef = await _sqlDataAccess.ListarValorRefPorGrupoID(formula.GrupoId);
+
+        var result = new NutrienteCompleto();
+        result.Grupo = valoresRef.First().Grupo;
+        foreach (var valorRef in valoresRef)
+        {
+            var gr = infoNutricional[valorRef.NutrienteId];
+            var vd = gr / valorRef.ValorDiario;
+            var tuple = new Tuple<double, double>(gr, vd);
+            result.InfoNutri.Add(valorRef.Nutriente, tuple);
+        }
+
+        return result;
     }
 }

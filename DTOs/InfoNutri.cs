@@ -22,15 +22,15 @@ public static class InfoNutriExtensions
         return infos;
     }
 
-    public static IDictionary<string, double> SomarNutrientes(
+    public static IDictionary<int, double> SomarNutrientes(
         this IEnumerable<InfoNutri> infos)
     {
-        var result = new Dictionary<string, double>();
+        var result = new Dictionary<int, double>();
         foreach (var info in infos)
         {
-            if (!result.TryAdd(info.Nutriente, info.Gramas))
+            if (!result.TryAdd(info.NutrienteId, info.Gramas))
             {
-                result[info.Nutriente] += info.Gramas;
+                result[info.NutrienteId] += info.Gramas;
             }
         }
         return result;

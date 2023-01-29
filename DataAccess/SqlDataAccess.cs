@@ -61,4 +61,21 @@ public class SqlDataAccess : ISqlDataAccess
 
         return results;
     }
+
+    public async Task<IEnumerable<ValorRef>> ListarValorRefPorGrupoID(int id)
+    {
+        using IDbConnection connection =
+            new SqlConnection(_config.GetConnectionString("SqlConnection"));
+
+        var query = @"SELECT GrupoId, Grupo, NutrienteId, Nutriente, ValorDiario
+                    FROM [nutricaodb].[dbo].[valor_referencia] vr
+                    INNER JOIN grupos g ON vr.GrupoId=g.Id
+                    INNER JOIN nutrientes n ON vr.NutrienteId=n.Id
+                    WHERE grupoId = @id";
+
+        var results = await connection
+            .QueryAsync<ValorRef>(query, new { id = id });
+
+        return results;
+    }
 }
