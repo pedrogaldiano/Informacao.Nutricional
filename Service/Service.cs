@@ -23,8 +23,9 @@ public class Service : IService
         await _sqlDataAccess.ListarIngredientesPorIDs(listaIDs);
 
     public async Task<IDictionary<int, double>> GerarInfoNutricional(
-        IDictionary<int, double> formula)
+        FormulaRequest formulaRequest)
     {
+        var formula = formulaRequest.FormulaDict;
         var infos = await _sqlDataAccess
             .ListarIngredientesPorIDs(formula.Keys.ToArray());
 
@@ -37,11 +38,11 @@ public class Service : IService
     public async Task<NutrienteCompleto> GerarInfoNutricionalVD(
         FormulaRequest formula)
     {
-        var infoNutricional = await GerarInfoNutricional(formula.FormulaDict);
+        var infoNutricional = await GerarInfoNutricional(formula);
         var valoresRef = await _sqlDataAccess.ListarValorRefPorGrupoID(formula.GrupoId);
 
         var result = new NutrienteCompleto(valoresRef.First().Grupo);
-        // result.Grupo = valoresRef.First().Grupo;
+
         foreach (var valorRef in valoresRef)
         {
             var gramas = infoNutricional[valorRef.NutrienteId];

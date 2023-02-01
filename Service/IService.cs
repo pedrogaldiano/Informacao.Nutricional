@@ -9,7 +9,7 @@ public interface IService
     Task<IEnumerable<GrupoModel>> ListarTodosGrupos();
     Task<IEnumerable<InfoNutri>> ListarIngredientesPorIDs(int[] listaIDs);
     Task<IDictionary<int, double>> GerarInfoNutricional(
-        IDictionary<int, double> formula);
+        FormulaRequest formula);
     Task<NutrienteCompleto> GerarInfoNutricionalVD(
         FormulaRequest formula);
 }

@@ -52,15 +52,9 @@ public class InformacaNutricionalController : ControllerBase
 
     [HttpPost("Formula")]
     public async Task<ActionResult<IDictionary<string, double>>> Formula(
-        IDictionary<int, double> formula)
+        FormulaRequest formula)
     {
-        if (formula.Count() == 0) return BadRequest();
-
-        if (formula.Keys.Any(x => x <= 0)) return BadRequest();
-
-        if (formula.Values.Any(x => x <= 0)) return BadRequest();
-
-        if (formula.Values.Sum() != 100) return BadRequest();
+        if (!formula.isValid()) return BadRequest();
 
         return Ok(await _service.GerarInfoNutricional(formula));
     }
@@ -69,13 +63,7 @@ public class InformacaNutricionalController : ControllerBase
     public async Task<ActionResult<IEnumerable<NutrienteCompleto>>> ValorDiario(
         FormulaRequest formula)
     {
-        // if (formula.Count() == 0) return BadRequest();
-
-        // if (formula.Keys.Any(x => x <= 0)) return BadRequest();
-
-        // if (formula.Values.Any(x => x <= 0)) return BadRequest();
-
-        // if (formula.Values.Sum() != 100) return BadRequest();
+        if (!formula.isValid()) return BadRequest();
 
         return Ok(await _service.GerarInfoNutricionalVD(formula));
     }
