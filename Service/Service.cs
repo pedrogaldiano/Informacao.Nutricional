@@ -1,6 +1,7 @@
 using Informacao.Nutricional.DataAccess;
 using Informacao.Nutricional.DTOs;
 using Informacao.Nutricional.Models;
+using Informacao.Nutricional.Extensions;
 
 namespace Informacao.Nutricional.Service;
 
@@ -45,8 +46,9 @@ public class Service : IService
 
         foreach (var valorRef in valoresRef)
         {
-            var gramas = infoNutricional[valorRef.NutrienteId];
-            var valorDiario = gramas * 100.00 / valorRef.ValorDiario;
+            var gramas = infoNutricional.GetValueOrDefault(valorRef.NutrienteId, 0);
+            var valorDiario = valorRef.ValorDiario == 0 ?
+                0 : gramas * 100.00 / valorRef.ValorDiario;
 
             var nutriente = new NutrienteGroup()
             {
